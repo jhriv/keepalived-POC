@@ -1,0 +1,96 @@
+---
+
+- name: Keepalived test
+  hosts: pr
+  # pr is for proxy!
+  vars:
+    vip: 172.16.1.5
+
+  tasks:
+    - name: Set hostname
+      copy:
+        dest: /etc/hostname
+        content: |
+          {{ inventory_hostname }}
+      become: true
+
+    - name: Enable nonlocal bind
+      sysctl:
+        name: net.ipv4.ip_nonlocal_bind
+        value: '1'
+        state: present
+        sysctl_set: true
+      become: true
+
+    - name: Install Keepalived, HAProxy, Nginx
+      package:
+        name: ['keepalived','haproxy','nginx']
+        state: present
+      become: true
+
+    - name: Create generic index
+      template:
+        dest: /var/www/html/index.html
+        src: nginx.index.html.j2
+      become: true
+
+    - name: Congigure Nginx
+      template:
+        dest: /etc/nginx/sites-available/default
+        src: nginx.default.j2
+      become: true
+      notify: Restart Nginx
+
+    - name: Congigure HAProxy
+      template:
+        dest: /etc/haproxy/haproxy.cfg
+        src: haproxy.cfg.j2
+      become: true
+      notify: Restart HAProxy
+
+    - name: Configure Keepalived
+      template:
+        dest: /etc/keepalived/keepalived.conf
+        src: keepalived.conf.j2
+      become: true
+      tags: doit
+      notify: Restart Keepalived
+
+    - name: Install helper scripts
+      template:
+        dest: /usr/local/bin/{{ item }}
+        src: '{{ item }}.j2'
+        mode: '0755'
+      become: true
+      loop:
+        - check_haproxy.sh
+        - keepalived.state.sh
+      tags: doit
+
+    - name: Enable keepalived
+      service:
+        name: keepalived
+        enabled: true
+        state: started
+      become: true
+
+  handlers:
+
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+      become: true
+
+    - name: Restart HAProxy
+      service:
+        name: haproxy
+        state: restarted
+      become: true
+
+    - name: Restart Keepalived
+      service:
+        name: keepalived
+        state: restarted
+      become: true
+      tags: doit

@@ -1,0 +1,5 @@
+.vagrant
+ansible.cfg
+*.log
+.inventory
+.ssh-config

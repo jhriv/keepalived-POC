@@ -1,0 +1,10 @@
+#!/bin/sh
+
+type="$1" {#- INSTANCE or GROUP #}
+
+name="$2" {#- name of group eg: VI_1, from keepalived.conf #}
+
+state="$3" {#- MASTER or BACKUP #}
+
+
+echo "$state" > /run/keepalived.state
