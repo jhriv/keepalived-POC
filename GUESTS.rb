@@ -16,12 +16,12 @@
 # If there are multiple systems, the first one will be marked "primary"
 
 GUESTS = [
+  # proxy / front ends
   { name: 'pr-1', box: 'ubuntu/bionic64', ip: '11' },
   { name: 'pr-2', box: 'ubuntu/bionic64', ip: '12' },
   { name: 'pr-3', box: 'ubuntu/bionic64', ip: '13' },
-  #{ name: 'web-1', box: 'centos/7', ip: '2' },
-  #{ name: 'web-2', ip: '192.168.1.3' },
-  #{ name: 'db-1' },
-  #{ name: 'app', sync: true, ports: [ 8088, { guest: 80, host: 8000 } ] },
-  #{ name: 'datastore', box: 'ubuntu/bionic64', needs_python: true },
+  # back end webservers
+  { name: 'be-1', box: 'ubuntu/bionic64', ip: '31' },
+  { name: 'be-2', box: 'ubuntu/bionic64', ip: '32' },
+  { name: 'be-3', box: 'ubuntu/bionic64', ip: '33' },
 ]
