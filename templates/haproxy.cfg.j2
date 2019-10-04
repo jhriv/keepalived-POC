@@ -1,3 +1,5 @@
+# ANSIBLE MANAGED! DO NOT EDIT!
+
 global
   log /dev/log local0
   log /dev/log local1 notice
@@ -43,10 +45,12 @@ frontend in
 
 backend nginx
   option httpchk GET /
+  balance source
   http-check expect status 200
   default-server inter 2s fall 1 rise 2
+  cookie session-id insert
 {% for host in groups['be'] %}
 {% if hostvars[host].ansible_enp0s8 is defined %}
-  server {{ host }} {{ hostvars[host].ansible_enp0s8.ipv4.address }}:80 check
+  server {{ host }} {{ hostvars[host].ansible_enp0s8.ipv4.address }}:80 check cookie {{ ('salt' + host) | hash('md5') }}
 {% endif %}
 {% endfor %}
