@@ -38,6 +38,7 @@
       template:
         dest: /etc/haproxy/haproxy.cfg
         src: haproxy.cfg.j2
+        validate: haproxy -c -f %s
       become: true
       notify: Restart HAProxy
 
