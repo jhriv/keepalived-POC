@@ -22,7 +22,7 @@ If you really break things drastically:
 
 ### Status:
 
-Run in a separate terminal. Runinng the lynx/curl/nc under `watch` will let
+Run in a separate terminal. Running the lynx/curl/nc under `watch` will let
 you keep a live update.
 
 * `sudo ping -f 172.16.1.5`
@@ -39,8 +39,8 @@ Mix and match!
 * `ansible pr-1 -b -m service -a 'name=keepalived state=stopped'`
 * `ansible pr-1 -b -m service -a 'name=haproxy state=stopped'`
 * Pick a backend (the one that is responding is a good choice) `vagrant halt
-  pe-1`
-* ansible be-1 -b -m service -a 'name=nginx state=stopped`
+  be-1`
+* `ansible be-1 -b -m service -a 'name=nginx state=stopped'`
 
 Re-run the playbook after these:
 
