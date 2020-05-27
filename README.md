@@ -8,8 +8,8 @@ Enjoy !
 ## Running playbook by hand
 
 Use either `make main` as provided by the Makefile, or `ansible-playbook
-main.yml` if you want to use options like `-C`/`--check` or `-D/--diff` or if
-you want to limit the hosts in the play.
+main.yml`. You must use use `ansible-playbook` to use options like
+`-C`/`--check` or `-D/--diff` or  limit the hosts in the play.
 
 If you really break things drastically:
 
@@ -35,12 +35,13 @@ you keep a live update.
 
 Mix and match!
 
-* Pick a proxy (the one that is MASTER is a good choice) `vagrant halt pr-1`
-* `ansible pr-1 -b -m service -a 'name=keepalived state=stopped'`
-* `ansible pr-1 -b -m service -a 'name=haproxy state=stopped'`
-* Pick a backend (the one that is responding is a good choice) `vagrant halt
-  be-1`
-* `ansible be-1 -b -m service -a 'name=nginx state=stopped'`
+* Pick a frontend proxy (the one that is MASTER is a good choice):
+  * `vagrant halt pr-1`
+  * `ansible pr-1 -b -m service -a 'name=keepalived state=stopped'`
+  * `ansible pr-1 -b -m service -a 'name=haproxy state=stopped'`
+* Pick a backend web server (the one that is responding is a good choice):
+  * `vagrant halt be-1`
+  * `ansible be-1 -b -m service -a 'name=nginx state=stopped'`
 
 Re-run the playbook after these:
 
@@ -51,7 +52,7 @@ Re-run the playbook after these:
 ## DEPRECATION WARNING
 
 If you are getting `host <...> should use /usr/bin/python3` or other
-deprecation wnarnings, silence them with:
+deprecation warnings, silence them with:
 
 ```
 $ export ANSIBLE_DEPRECATION_WARNINGS=false
